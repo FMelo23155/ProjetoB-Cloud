@@ -111,46 +111,23 @@ services:
     networks:
       - webnet
 
-  # PostgreSQL Secondary (Hot Standby)
+  # PostgreSQL Secondary (Independent Backup)
   postgres-secondary:
     image: postgres:15
     environment:
+      POSTGRES_DB: cnv_project
+      POSTGRES_USER: cnv_user
       POSTGRES_PASSWORD: cnv_password
-      PGUSER: postgres
-      POSTGRES_PRIMARY_HOST: postgres-primary
-      POSTGRES_PRIMARY_PORT: 5432
       POSTGRES_REPLICATION_USER: replicator
       POSTGRES_REPLICATION_PASSWORD: repl_password
-    volumes:
-      - postgres_secondary_data:/var/lib/postgresql/data
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
       placement:
-        constraints: [node.hostname == worker01]
+        constraints: [node.role == worker]
     networks:
       - webnet
-    depends_on:
-      - postgres-primary
-    command: >
-      bash -c "
-      echo 'Waiting for primary to be ready...' &&
-      sleep 15 &&
-      until pg_isready -h postgres-primary -p 5432 -U postgres; do
-        echo 'Primary not ready, waiting...' &&
-        sleep 5
-      done &&
-      echo 'Primary is ready, starting secondary...' &&
-      if [ ! -f /var/lib/postgresql/data/PG_VERSION ]; then
-        echo 'Setting up replica...' &&
-        PGPASSWORD=repl_password pg_basebackup -h postgres-primary -D /var/lib/postgresql/data -U replicator -v -P -R &&
-        echo \"standby_mode = 'on'\" > /var/lib/postgresql/data/standby.signal &&
-        echo \"primary_conninfo = 'host=postgres-primary port=5432 user=replicator password=repl_password'\" >> /var/lib/postgresql/data/postgresql.auto.conf
-      fi &&
-      chown -R postgres:postgres /var/lib/postgresql/data &&
-      exec gosu postgres postgres
-      "
 
   # HAProxy for automatic failover
   postgres-ha:

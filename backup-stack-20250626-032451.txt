@@ -1,0 +1,27 @@
+ID             NAME                                IMAGE                 NODE       DESIRED STATE   CURRENT STATE               ERROR                       PORTS
+pa33gxf7xruv   my_stack_php-app.1                  php_app:latest        Manager1   Running         Running 30 minutes ago                                  
+el2qt6n06yoi    \_ my_stack_php-app.1              php_app:latest        Worker01   Shutdown        Failed 31 minutes ago       "task: non-zero exit (4)"   
+ak786pwupxit    \_ my_stack_php-app.1              php_app:latest        Worker03   Shutdown        Failed 31 minutes ago       "task: non-zero exit (4)"   
+h71cyqv892t5    \_ my_stack_php-app.1              php_app:latest        Worker03   Shutdown        Failed 31 minutes ago       "task: non-zero exit (4)"   
+jnis9zq7ryp6    \_ my_stack_php-app.1              php_app:latest        Worker03   Shutdown        Failed 31 minutes ago       "task: non-zero exit (4)"   
+rn2ptgt75fiz   my_stack_php-app.2                  php_app:latest        Manager1   Running         Running 30 minutes ago                                  
+za8ewfm0rsyx    \_ my_stack_php-app.2              php_app:latest        Worker02   Shutdown        Failed 31 minutes ago       "task: non-zero exit (4)"   
+0e1hudnsmjfs    \_ my_stack_php-app.2              php_app:latest        Worker02   Shutdown        Failed 31 minutes ago       "task: non-zero exit (4)"   
+vfre9ob2j74c    \_ my_stack_php-app.2              php_app:latest        Worker02   Shutdown        Failed 31 minutes ago       "task: non-zero exit (4)"   
+8p12gdbyq5d4    \_ my_stack_php-app.2              php_app:latest        Worker02   Shutdown        Failed 31 minutes ago       "task: non-zero exit (4)"   
+lnlaot0vga3g   my_stack_php-app.3                  php_app:latest        Manager1   Running         Running 30 minutes ago                                  
+x5z0nvy6fwur    \_ my_stack_php-app.3              php_app:latest        Worker03   Shutdown        Failed 31 minutes ago       "task: non-zero exit (4)"   
+o8a7hhwwlzrh    \_ my_stack_php-app.3              php_app:latest        Worker01   Shutdown        Failed 31 minutes ago       "task: non-zero exit (4)"   
+kc5jw98tjoto    \_ my_stack_php-app.3              php_app:latest        Worker01   Shutdown        Failed 31 minutes ago       "task: non-zero exit (4)"   
+x231nb9fe3xo    \_ my_stack_php-app.3              php_app:latest        Worker01   Shutdown        Failed 31 minutes ago       "task: non-zero exit (4)"   
+a9r2lw4tiwdi   my_stack_postgres-ha.1              haproxy:2.8           Manager1   Running         Running 31 minutes ago                                  
+vetpbb6ds2r8   my_stack_postgres-primary.1         postgres:15           Manager1   Running         Running 3 minutes ago                                   
+fvf1gav3lffx   my_stack_postgres-secondary.1       postgres:15           Worker01   Running         Running 4 seconds ago                                   
+yduq0exu4e69    \_ my_stack_postgres-secondary.1   postgres:15           Worker01   Shutdown        Failed 9 seconds ago        "task: non-zero exit (1)"   
+f5rjsr0to4ae    \_ my_stack_postgres-secondary.1   postgres:15           Worker01   Shutdown        Failed 30 seconds ago       "task: non-zero exit (1)"   
+j46tpuqs19j3    \_ my_stack_postgres-secondary.1   postgres:15           Worker01   Shutdown        Failed 51 seconds ago       "task: non-zero exit (1)"   
+xmrm1lnybf10    \_ my_stack_postgres-secondary.1   postgres:15           Worker01   Shutdown        Failed about a minute ago   "task: non-zero exit (1)"   
+ze0db4hut158   my_stack_redis.1                    redis:latest          Manager1   Running         Running 31 minutes ago                                  
+vgwu07ue8pqx   my_stack_server-ws.1                server_ws_js:latest   Worker02   Running         Running 31 minutes ago                                  
+rcyciqkx2z0v   my_stack_server-ws.2                server_ws_js:latest   Worker01   Running         Running 31 minutes ago                                  
+vvuogoy1wjpj   my_stack_server-ws.3                server_ws_js:latest   Worker03   Running         Running 31 minutes ago                                  
