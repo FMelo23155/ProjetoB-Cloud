@@ -1,6 +1,9 @@
 -- Script para criar as tabelas necessárias da aplicação
 -- Executado automaticamente na inicialização do PostgreSQL
 
+-- Criar usuário de replicação
+CREATE USER replicator WITH REPLICATION ENCRYPTED PASSWORD 'repl_password';
+
 -- Criar tabela de mensagens se não existir
 CREATE TABLE IF NOT EXISTS messages (
     id SERIAL PRIMARY KEY,

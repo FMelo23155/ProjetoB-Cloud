@@ -1,18 +1,56 @@
 #!/bin/bash
 set -e
 
-echo "Configurando PostgreSQL Secondary (Hot Standby)..."
+# Script para configurar PostgreSQL Standby/Replica
 
-# Aguardar primary estar disponível
-echo "Aguardando PostgreSQL Primary estar disponível..."
-until pg_isready -h postgres-primary -p 5432 -U postgres; do
-  echo "Tentando conectar ao Primary..."
+echo "🔄 Configurando PostgreSQL Standby (Secondary)..."
+
+# Aguardar o primary estar pronto
+echo "⏳ Aguardando PostgreSQL Primary ficar disponível..."
+until pg_isready -h postgres-primary -U postgres; do
+  echo "Aguardando primary..."
   sleep 5
 done
 
-echo "Primary disponível! Iniciando configuração do Secondary..."
+echo "✅ Primary disponível!"
 
-# Limpar dados existentes
+# Se não existe backup base, criar um
+if [ ! -f /var/lib/postgresql/data/PG_VERSION ]; then
+    echo "📥 Criando backup base do Primary..."
+    
+    # Limpar dados existentes
+    rm -rf /var/lib/postgresql/data/*
+    
+    # Criar diretório de archive se não existir
+    mkdir -p /var/lib/postgresql/data/archive
+    
+    # Fazer backup base
+    PGPASSWORD=repl_password pg_basebackup \
+        -h postgres-primary \
+        -D /var/lib/postgresql/data \
+        -U replicator \
+        -R -W -v -P
+    
+    echo "✅ Backup base criado!"
+    
+    # Configurar como standby
+    echo "📝 Configurando como standby..."
+    
+    # Adicionar configurações específicas do standby
+    cat >> /var/lib/postgresql/data/postgresql.conf << EOF
+
+# Configurações de Standby
+hot_standby = on
+max_standby_streaming_delay = 30s
+max_standby_archive_delay = 30s
+wal_receiver_status_interval = 10s
+hot_standby_feedback = on
+EOF
+
+    echo "✅ Standby configurado!"
+fi
+
+echo "🚀 Iniciando PostgreSQL Standby..."
 rm -rf /var/lib/postgresql/data/*
 
 # Fazer backup base do primary
