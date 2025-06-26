@@ -1,0 +1,114 @@
+version: '3.8'
+
+networks:
+  webnet:
+    driver: overlay
+
+services:
+  php-app:
+    image: php_app
+    ports:
+      - "80:80"
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+      - 1.1.1.1
+    environment:
+      # Cloudinary Configuration
+      CLOUDINARY_CLOUD_NAME: "dzwdfzkjh"
+      CLOUDINARY_API_KEY: "121944848168127"
+      CLOUDINARY_API_SECRET: "aFP5XtX6BADTa4iTKOQZ40NbuJc"
+      # Database Configuration
+      DB_HOST: "postgres"
+      DB_PORT: "5432"
+      DB_NAME: "cnv_project"
+      DB_USER: "cnv_user"
+      DB_PASS: "cnv_password"
+      # WebSocket Configuration
+      WS_HOST: "10.10.20.11"
+      WS_PORT: "8888"
+      # Badge
+      BADGE: "Docker Swarm Cluster"
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+    networks:
+      - webnet
+    depends_on:
+      - postgres
+    command: >
+      /bin/bash -c "
+      echo 'DB_HOST=postgres' >> /var/www/html/.env &&
+      echo 'DB_PORT=5432' >> /var/www/html/.env &&
+      echo 'DB_NAME=cnv_project' >> /var/www/html/.env &&
+      echo 'DB_USER=cnv_user' >> /var/www/html/.env &&
+      echo 'DB_PASS=cnv_password' >> /var/www/html/.env &&
+      echo 'WS_HOST=10.10.20.11' >> /var/www/html/.env &&
+      echo 'WS_PORT=8888' >> /var/www/html/.env &&
+      echo 'BADGE=\"Docker Swarm Cluster\"' >> /var/www/html/.env &&
+      echo DEPLOY_DATE=$$(date -u +'%Y-%m-%dT%H:%M:%SZ') >> /var/www/html/.env &&
+      cd /var/www/html/ &&
+      composer install &&
+      apache2ctl -D FOREGROUND"
+  
+  server-ws:
+    image: server_ws_js
+    ports:
+      - "8888:8888"
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+      - 1.1.1.1
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 2
+        delay: 10s
+    depends_on:
+      - redis
+    networks:
+      - webnet
+    command: >
+      /bin/bash -c "npm install &&
+      node ws_server.js"
+  
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - webnet
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: cnv_project
+      POSTGRES_USER: cnv_user
+      POSTGRES_PASSWORD: cnv_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - webnet
+
+volumes:
+  postgres_data:
+

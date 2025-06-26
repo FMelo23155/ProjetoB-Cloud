@@ -1,0 +1,19 @@
+# Use a base image with Ubuntu
+FROM node:latest
+
+# Cria o diretório de trabalho
+RUN mkdir /ws
+
+# Define o diretório de trabalho
+WORKDIR /ws
+
+# Copia os arquivos do projeto para o container
+COPY ./ws-js /ws
+
+RUN npm install
+
+# Expõe a porta
+EXPOSE 8888
+
+# Comando para iniciar o script PHP
+CMD ["node", "ws_server.js"]
