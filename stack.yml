@@ -3,6 +3,7 @@ version: '3.8'
 networks:
   webnet:
     driver: overlay
+    attachable: true
 
 services:
   php-app:
