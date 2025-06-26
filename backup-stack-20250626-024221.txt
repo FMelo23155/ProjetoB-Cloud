@@ -1,0 +1,31 @@
+ID             NAME                                IMAGE                 NODE       DESIRED STATE   CURRENT STATE               ERROR                       PORTS
+oll3o6p2xv9a   my_stack_php-app.1                  php_app:latest        Manager1   Running         Running 34 minutes ago                                  
+mflvpkf659y1    \_ my_stack_php-app.1              php_app:latest        Worker01   Shutdown        Failed 34 minutes ago       "task: non-zero exit (4)"   
+zm0j5r3uvevv    \_ my_stack_php-app.1              php_app:latest        Worker02   Shutdown        Failed 35 minutes ago       "task: non-zero exit (4)"   
+i1cn8jdyu9r5    \_ my_stack_php-app.1              php_app:latest        Worker02   Shutdown        Failed 35 minutes ago       "task: non-zero exit (4)"   
+tt03k1el3ko2    \_ my_stack_php-app.1              php_app:latest        Worker02   Shutdown        Failed 35 minutes ago       "task: non-zero exit (4)"   
+54zzem1ptwcc   my_stack_php-app.2                  php_app:latest        Manager1   Running         Running 34 minutes ago                                  
+oc5vuam1k476    \_ my_stack_php-app.2              php_app:latest        Worker03   Shutdown        Failed 35 minutes ago       "task: non-zero exit (4)"   
+988kgu7ldqha    \_ my_stack_php-app.2              php_app:latest        Worker03   Shutdown        Failed 35 minutes ago       "task: non-zero exit (4)"   
+jbmq8osmkqm0    \_ my_stack_php-app.2              php_app:latest        Worker03   Shutdown        Failed 35 minutes ago       "task: non-zero exit (4)"   
+o8g3tj1pnitu    \_ my_stack_php-app.2              php_app:latest        Worker02   Shutdown        Failed 35 minutes ago       "task: non-zero exit (4)"   
+o2ndcdhvr0qg   my_stack_php-app.3                  php_app:latest        Manager1   Running         Running 34 minutes ago                                  
+wwt42e3sk8w8    \_ my_stack_php-app.3              php_app:latest        Worker01   Shutdown        Failed 35 minutes ago       "task: non-zero exit (4)"   
+muh77eb5qhim    \_ my_stack_php-app.3              php_app:latest        Worker01   Shutdown        Failed 35 minutes ago       "task: non-zero exit (4)"   
+rtdik0n7yush    \_ my_stack_php-app.3              php_app:latest        Worker01   Shutdown        Failed 35 minutes ago       "task: non-zero exit (4)"   
+6josv25h6ip3    \_ my_stack_php-app.3              php_app:latest        Worker01   Shutdown        Failed 35 minutes ago       "task: non-zero exit (4)"   
+qklywyvmaf7d   my_stack_postgres-ha.1              haproxy:2.8           Manager1   Running         Running 30 minutes ago                                  
+lo8vaxmrkkpe    \_ my_stack_postgres-ha.1          haproxy:2.8           Manager1   Shutdown        Failed 30 minutes ago       "task: non-zero exit (1)"   
+jn4j54tp401i    \_ my_stack_postgres-ha.1          haproxy:2.8           Manager1   Shutdown        Failed 30 minutes ago       "task: non-zero exit (1)"   
+zo00lsrzanyz    \_ my_stack_postgres-ha.1          haproxy:2.8           Manager1   Shutdown        Failed 30 minutes ago       "task: non-zero exit (1)"   
+i7kk78zfvlys    \_ my_stack_postgres-ha.1          haproxy:2.8           Manager1   Shutdown        Failed 31 minutes ago       "task: non-zero exit (1)"   
+uq7luh9yln2s   my_stack_postgres-primary.1         postgres:15           Manager1   Running         Running 35 minutes ago                                  
+u6xzwl1hcxlb   my_stack_postgres-secondary.1       postgres:15           Worker01   Running         Running 11 seconds ago                                  
+a1oe1x20jctb    \_ my_stack_postgres-secondary.1   postgres:15           Worker01   Shutdown        Failed 17 seconds ago       "task: non-zero exit (1)"   
+6g5nb1u05leb    \_ my_stack_postgres-secondary.1   postgres:15           Worker01   Shutdown        Failed 38 seconds ago       "task: non-zero exit (1)"   
+bx8hg23qgxpp    \_ my_stack_postgres-secondary.1   postgres:15           Worker01   Shutdown        Failed 59 seconds ago       "task: non-zero exit (1)"   
+5iytqrj10e1b    \_ my_stack_postgres-secondary.1   postgres:15           Worker01   Shutdown        Failed about a minute ago   "task: non-zero exit (1)"   
+zcc5bb874l5v   my_stack_redis.1                    redis:latest          Manager1   Running         Running 35 minutes ago                                  
+f706yvnpvcys   my_stack_server-ws.1                server_ws_js:latest   Worker03   Running         Running 35 minutes ago                                  
+0jntloimznd0   my_stack_server-ws.2                server_ws_js:latest   Worker02   Running         Running 35 minutes ago                                  
+wpwkbtf0ya7l   my_stack_server-ws.3                server_ws_js:latest   Worker01   Running         Running 35 minutes ago                                  
