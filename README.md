@@ -1,4 +1,3 @@
-
 # Project B: Cloud Computing and Virtualization - High Availability PostgreSQL
 
 This repository contains Project B of the Cloud Computing and Virtualization course for the MEI-IoT program, featuring a **High Availability PostgreSQL** configuration with automatic failover capabilities.
@@ -34,6 +33,139 @@ The project implements a robust Docker Swarm environment with **High Availabilit
 Make sure you have the following installed on your system:
 - Vagrant
 - VirtualBox or any other Vagrant-supported provider
+
+## Tutorial de Inicialização (Português)
+
+### Pré-requisitos
+Certifica-te de que tens instalado no teu sistema:
+- **Vagrant** (versão 2.2+ recomendada)
+- **VirtualBox** ou outro fornecedor suportado pelo Vagrant
+- **Git** para clonar o repositório
+
+### Passo a Passo Completo
+
+#### 1. Preparação do Ambiente
+```powershell
+# Clona o repositório (se ainda não fizeste)
+git clone <url-do-repositorio>
+cd CNV-ProjetoB-main
+
+# Verifica se o Vagrant está instalado
+vagrant --version
+
+# Verifica se o VirtualBox está instalado
+vboxmanage --version
+```
+
+#### 2. Inicialização das Máquinas Virtuais
+```powershell
+# Inicia todas as VMs (manager e workers)
+vagrant up
+```
+⏳ **Nota:** Este processo pode demorar 10-15 minutos na primeira execução.
+
+#### 3. Verificação do Docker Swarm
+```powershell
+# Faz SSH para o manager
+vagrant ssh manager01
+
+# Verifica o estado do cluster
+docker node ls
+```
+
+#### 4. Deploy da Aplicação High Availability
+```bash
+# Dentro da VM manager01
+cd /vagrant
+
+# Executa o script de deploy HA
+./deploy-ha.sh
+```
+
+#### 5. Verificação Rápida
+```bash
+# Executa o teste rápido de verificação
+./quick-test.sh
+```
+
+#### 6. Acesso à Aplicação
+Após o deploy bem-sucedido, podes aceder a:
+
+- **🌐 Aplicação Principal:** http://10.10.20.11
+- **📊 HAProxy Stats:** http://10.10.20.11:8404/stats (admin/admin123)
+- **💬 WebSockets:** ws://10.10.20.11:8888
+- **🗄️ Base de Dados:** Host: 10.10.20.11, Porta: 5432
+
+### Comandos Úteis para Gestão
+
+#### Monitorização
+```bash
+# Ver estado dos serviços
+docker service ls
+
+# Ver logs do HAProxy
+docker service logs my_stack_postgres-ha -f
+
+# Ver logs da aplicação PHP
+docker service logs my_stack_php-app -f
+```
+
+#### Teste de Failover
+```bash
+# Simular falha do PostgreSQL Primary
+docker service scale my_stack_postgres-primary=0
+
+# Verificar failover no HAProxy Stats
+curl http://10.10.20.11:8404/stats
+
+# Restaurar Primary
+docker service scale my_stack_postgres-primary=1
+```
+
+#### Resolução de Problemas
+```bash
+# Reiniciar stack completa
+docker stack rm my_stack
+sleep 30
+docker stack deploy -c /vagrant/stack.yml my_stack
+
+# Limpar volumes (cuidado - apaga dados!)
+docker volume prune -f
+```
+
+### Estrutura da Aplicação
+A aplicação inclui as seguintes páginas:
+
+- **Home (/)** - Informações do servidor e estado HA
+- **Sessions (/sessions.php)** - Gestão de sessões PostgreSQL
+- **Files (/upload.php)** - Upload para Cloudinary
+- **Database (/db.php)** - Operações CRUD na BD
+- **WebSockets (/websockets.php)** - Chat em tempo real
+- **About (/about.php)** - Informações do projeto
+
+### Arquitetura High Availability
+```
+┌─────────────────┐    ┌─────────────────┐
+│   PHP App x3    │    │  WebSocket x3   │
+└─────────────────┘    └─────────────────┘
+         │                       │
+┌─────────────────────────────────────────┐
+│              HAProxy                    │
+└─────────────────────────────────────────┘
+         │                       │
+┌─────────────────┐    ┌─────────────────┐
+│ PostgreSQL      │    │ PostgreSQL      │
+│ Primary         │◄──►│ Secondary       │
+│ (Master)        │    │ (Replica)       │
+└─────────────────┘    └─────────────────┘
+```
+
+### Dicas Importantes
+- 🚨 **Sempre executa os comandos no manager01**
+- 📊 **Monitoriza regularmente o HAProxy Stats**
+- 🔄 **Testa o failover periodicamente**
+- 💾 **Os dados persistem mesmo após reiniciar containers**
+- 🐛 **Usa ./quick-test.sh para diagnósticos rápidos**
 
 ## High Availability Deployment
 
